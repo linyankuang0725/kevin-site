@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bazi Weekly Insight | Kevin Site</title>
-    <meta name="description" content="Experimental Bazi weekly insight MVP with birth data input, optional WhatsApp subscription, and integrated destiny report templates." />
+    <meta name="description" content="Experimental Bazi weekly insight MVP with birth data input, optional WhatsApp subscription, and dynamic integrated destiny report output." />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -16,24 +16,24 @@
       <h1>Integrated Destiny Report</h1>
       <p class="hero-copy">
         A first-pass experience that combines Bazi, Ziwei, Human Design, and Astrology into an English weekly-style report.
-        Enter your birth details, optionally add your WhatsApp number, and preview the report templates instantly.
+        Enter your birth details, optionally add your WhatsApp number, and generate a dynamic long-form reading instantly.
       </p>
       <div class="hero-pills">
         <span>English-first</span>
-        <span>RWD ready</span>
-        <span>WhatsApp opt-in</span>
+        <span>Mobile responsive</span>
+        <span>Dynamic output</span>
       </div>
     </header>
 
-    <main class="container layout">
+    <main class="container stack-layout">
       <section class="panel form-panel">
         <div class="section-head">
-          <h2>Profile input</h2>
-          <p>Required for the v0 demo: name, birth date, birth time, birthplace. Phone number is optional for future weekly delivery.</p>
+          <h2>Enter your profile</h2>
+          <p>Required for the v0 demo: name, birth date, birth time, birthplace. Phone number is optional for future WhatsApp weekly reports.</p>
         </div>
 
         <form id="bazi-form" class="bazi-form">
-          <div class="field-grid">
+          <div class="field-grid two-col">
             <label class="field">
               <span>Name</span>
               <input type="text" id="name" name="name" placeholder="e.g. Kevin" required />
@@ -71,105 +71,28 @@
             <span>I want to receive future WhatsApp weekly reports.</span>
           </label>
 
-          <button class="primary-btn" type="submit">Generate v0 report</button>
+          <button class="primary-btn" type="submit">Generate report</button>
         </form>
       </section>
 
       <section class="panel result-panel" id="report-root">
         <div class="section-head">
-          <h2>Report preview</h2>
-          <p>This v0 uses a polished template report style. It is intentionally product-oriented and ready for future engine integration.</p>
+          <h2>Generated report</h2>
+          <p>This v0 intentionally renders one continuous markdown-style interpretation instead of separate cards.</p>
         </div>
 
-        <div class="summary-card">
-          <div>
-            <span class="summary-label">Current mode</span>
-            <strong id="summary-name">Template preview</strong>
-          </div>
-          <div>
-            <span class="summary-label">Weekly signal</span>
-            <strong id="summary-score">Focused growth</strong>
-          </div>
-          <div>
-            <span class="summary-label">WhatsApp</span>
-            <strong id="summary-whatsapp">Not enabled</strong>
-          </div>
+        <div class="report-meta">
+          <div><span>Profile</span><strong id="summary-name">Template preview</strong></div>
+          <div><span>Signal</span><strong id="summary-score">Focused growth</strong></div>
+          <div><span>WhatsApp</span><strong id="summary-whatsapp">Not enabled</strong></div>
         </div>
 
-        <article class="report-card">
-          <h3>One-line weekly verdict</h3>
-          <p id="verdict">This week rewards focus, restraint, and choosing the highest-leverage move instead of reacting to every incoming signal.</p>
-        </article>
-
-        <div class="report-grid">
-          <article class="report-card">
-            <h3>1) Career / Work</h3>
-            <ul id="career-list">
-              <li>You perform best when you reduce noise and commit to one or two leverage-heavy priorities.</li>
-              <li>This is not a week to expand blindly; it is a week to tighten execution and sharpen direction.</li>
-              <li>Push decisions only after the structure is clear, not when the room is loud.</li>
-            </ul>
-          </article>
-
-          <article class="report-card">
-            <h3>2) Relationships / People</h3>
-            <ul id="relationship-list">
-              <li>Be concise and specific; people will understand your intent better through clarity than through over-explaining.</li>
-              <li>Protect your energy from low-quality interactions and vague expectations.</li>
-              <li>Say what you need directly instead of waiting for others to infer it.</li>
-            </ul>
-          </article>
-
-          <article class="report-card">
-            <h3>3) State / Energy</h3>
-            <ul id="energy-list">
-              <li>Your main risk is mental fragmentation, not lack of ability.</li>
-              <li>When too many tabs stay open in your mind, execution quality drops quickly.</li>
-              <li>Use routines that close loops: write tomorrow's top 3 before sleep.</li>
-            </ul>
-          </article>
-
-          <article class="report-card highlight-card">
-            <h3>Integrated destiny reading</h3>
-            <p id="integrated-reading">
-              Across Bazi, Ziwei, Human Design, and Astrology, your dominant pattern is that of a strategic operator: someone who is strongest when choosing, structuring, and allocating energy deliberately.
-            </p>
-          </article>
-        </div>
-
-        <div class="report-grid actions-grid">
-          <article class="report-card">
-            <h3>3 actions for this week</h3>
-            <ol id="actions-list">
-              <li>Pick the single most valuable project and define the next concrete milestone.</li>
-              <li>Reduce one recurring source of distraction or low-value obligation.</li>
-              <li>Schedule one quiet decision block before committing to an important move.</li>
-            </ol>
-          </article>
-
-          <article class="report-card">
-            <h3>Pitfalls to avoid</h3>
-            <ul id="pitfalls-list">
-              <li>Overcommitting before your own thinking is settled.</li>
-              <li>Opening too many parallel tracks out of anxiety.</li>
-              <li>Confusing motion with meaningful progress.</li>
-            </ul>
-          </article>
-
-          <article class="report-card">
-            <h3>Lucky action windows</h3>
-            <ul id="windows-list">
-              <li>Monday morning — reset priorities and define the week.</li>
-              <li>Wednesday afternoon — have direct alignment conversations.</li>
-              <li>Friday late morning — make summary decisions and close loops.</li>
-            </ul>
-          </article>
-        </div>
+        <article class="markdown-report" id="markdown-report"></article>
       </section>
     </main>
 
     <footer class="container footer">
-      <p>v0 template only — this page is a product prototype, not a complete metaphysical engine yet.</p>
+      <p>v0 template only — this page is a product prototype, not a fully calculated metaphysical engine yet.</p>
     </footer>
 
     <script src="./app.js"></script>

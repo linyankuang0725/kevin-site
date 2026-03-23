@@ -10,7 +10,7 @@ export async function onRequestPost(context) {
       }
     }
 
-    const bridgeUrl = 'https://2b5515f7376a2d.lhr.life/bazi/report';
+    const bridgeUrl = 'https://1f2af3bdb4c7cf.lhr.life/bazi/report';
     const bridgeToken = 'qJtkn2BNllI-PTOv1KrMXnOcQB3G-1mGNNE3b0grDD0';
 
     const res = await fetch(bridgeUrl, {

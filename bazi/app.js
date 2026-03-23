@@ -38,7 +38,7 @@ function renderMarkdown(md) {
 }
 
 async function generateReport(payload) {
-  const res = await fetch('/api/bazi-report', {
+  const res = await fetch('/api/bazi-report-v2', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),

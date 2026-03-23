@@ -1,90 +1,87 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bazi Weekly Insight | Kevin Site</title>
-    <meta name="description" content="Experimental Bazi weekly insight MVP with birth data input, optional WhatsApp subscription, and dynamic integrated destiny report output." />
+    <title>八字綜合命理分析 | Kevin Site</title>
+    <meta name="description" content="實驗版八字綜合命理網站：輸入姓名、生辰、出生地與 WhatsApp 選填資訊，立即產生中文分析。" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div class="bg-glow bg-glow-a"></div>
-    <div class="bg-glow bg-glow-b"></div>
-
     <header class="hero container">
       <span class="eyebrow">Bazi v0 · Experimental</span>
-      <h1>Integrated Destiny Report</h1>
+      <h1>八字綜合命理分析</h1>
       <p class="hero-copy">
-        A first-pass experience that combines Bazi, Ziwei, Human Design, and Astrology into an English weekly-style report.
-        Enter your birth details, optionally add your WhatsApp number, and generate a dynamic long-form reading instantly.
+        這是第一版產品原型：結合八字、紫微、人類圖與星座語感，先產出中文長文式分析。
+        後續會升級成真正的排盤與後端解讀引擎。
       </p>
       <div class="hero-pills">
-        <span>English-first</span>
-        <span>Mobile responsive</span>
-        <span>Dynamic output</span>
+        <span>中文輸出</span>
+        <span>手機優先 RWD</span>
+        <span>WhatsApp 週報預留</span>
       </div>
     </header>
 
     <main class="container stack-layout">
       <section class="panel form-panel">
         <div class="section-head">
-          <h2>Enter your profile</h2>
-          <p>Required for the v0 demo: name, birth date, birth time, birthplace. Phone number is optional for future WhatsApp weekly reports.</p>
+          <h2>輸入資料</h2>
+          <p>目前必填：姓名、出生日期、出生時間、出生地點。手機號碼為選填，用於未來 WhatsApp 週報。</p>
         </div>
 
         <form id="bazi-form" class="bazi-form">
           <div class="field-grid two-col">
             <label class="field">
-              <span>Name</span>
-              <input type="text" id="name" name="name" placeholder="e.g. Kevin" required />
+              <span>姓名</span>
+              <input type="text" id="name" name="name" placeholder="例如：Kevin" required />
             </label>
             <label class="field">
-              <span>Birth date</span>
+              <span>出生日期</span>
               <input type="date" id="birthDate" name="birthDate" required />
             </label>
             <label class="field">
-              <span>Birth time</span>
+              <span>出生時間</span>
               <input type="time" id="birthTime" name="birthTime" required />
             </label>
             <label class="field">
-              <span>Birthplace</span>
-              <input type="text" id="birthPlace" name="birthPlace" placeholder="e.g. Taipei, Taiwan" required />
+              <span>出生地點</span>
+              <input type="text" id="birthPlace" name="birthPlace" placeholder="例如：台北，台灣" required />
             </label>
             <label class="field">
-              <span>Gender (optional)</span>
+              <span>性別（選填）</span>
               <select id="gender" name="gender">
-                <option value="">Prefer not to say</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="non-binary">Non-binary</option>
-                <option value="other">Other</option>
+                <option value="">不提供</option>
+                <option value="male">男</option>
+                <option value="female">女</option>
+                <option value="non-binary">非二元</option>
+                <option value="other">其他</option>
               </select>
             </label>
             <label class="field">
-              <span>WhatsApp number (optional)</span>
-              <input type="tel" id="phone" name="phone" placeholder="e.g. +49 1515 2132467" />
+              <span>WhatsApp 手機號碼（選填）</span>
+              <input type="tel" id="phone" name="phone" placeholder="例如：+49 1515 2132467" />
             </label>
           </div>
 
           <label class="checkbox-row">
             <input type="checkbox" id="whatsappOptIn" name="whatsappOptIn" />
-            <span>I want to receive future WhatsApp weekly reports.</span>
+            <span>我希望未來收到 WhatsApp 八字週報。</span>
           </label>
 
-          <button class="primary-btn" type="submit">Generate report</button>
+          <button class="primary-btn" type="submit">產生分析</button>
         </form>
       </section>
 
       <section class="panel result-panel" id="report-root">
         <div class="section-head">
-          <h2>Generated report</h2>
-          <p>This v0 intentionally renders one continuous markdown-style interpretation instead of separate cards.</p>
+          <h2>分析結果</h2>
+          <p>目前這一版先用中文長文形式呈現，下一版會升級成真正的排盤 + 後端解讀。</p>
         </div>
 
         <div class="report-meta">
-          <div><span>Profile</span><strong id="summary-name">Template preview</strong></div>
-          <div><span>Signal</span><strong id="summary-score">Focused growth</strong></div>
-          <div><span>WhatsApp</span><strong id="summary-whatsapp">Not enabled</strong></div>
+          <div><span>檔案</span><strong id="summary-name">模板預覽</strong></div>
+          <div><span>本週訊號</span><strong id="summary-score">聚焦成長</strong></div>
+          <div><span>WhatsApp</span><strong id="summary-whatsapp">未開啟</strong></div>
         </div>
 
         <article class="markdown-report" id="markdown-report"></article>
@@ -92,7 +89,7 @@
     </main>
 
     <footer class="container footer">
-      <p>v0 template only — this page is a product prototype, not a fully calculated metaphysical engine yet.</p>
+      <p>v0 仍屬產品原型，尚未接入完整命盤計算引擎。</p>
     </footer>
 
     <script src="./app.js"></script>

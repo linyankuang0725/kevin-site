@@ -4,89 +4,121 @@ const summaryName = document.getElementById('summary-name');
 const summaryScore = document.getElementById('summary-score');
 const summaryWhatsapp = document.getElementById('summary-whatsapp');
 
+const zodiacMap = [
+  ['摩羯座', 19], ['水瓶座', 18], ['雙魚座', 20], ['牡羊座', 19], ['金牛座', 20], ['雙子座', 20],
+  ['巨蟹座', 22], ['獅子座', 22], ['處女座', 22], ['天秤座', 22], ['天蠍座', 21], ['射手座', 21], ['摩羯座', 31]
+];
+const stems = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+const branches = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+const elements = ['木','火','土','金','水'];
+
 function getZodiacSign(month, day) {
-  const signs = [
-    ['Capricorn', 19], ['Aquarius', 18], ['Pisces', 20], ['Aries', 19], ['Taurus', 20], ['Gemini', 20],
-    ['Cancer', 22], ['Leo', 22], ['Virgo', 22], ['Libra', 22], ['Scorpio', 21], ['Sagittarius', 21], ['Capricorn', 31]
-  ];
-  return day <= signs[month - 1][1] ? signs[month - 1][0] : signs[month][0];
+  return day <= zodiacMap[month - 1][1] ? zodiacMap[month - 1][0] : zodiacMap[month][0];
 }
 
-function getTimeBucket(time) {
-  const hour = Number((time || '00:00').split(':')[0]);
-  if (hour < 6) return 'deep Yin';
-  if (hour < 12) return 'rising Yang';
-  if (hour < 18) return 'active Yang';
-  return 'settling Yin';
+function getTimeBranch(hour) {
+  return branches[Math.floor(((hour + 1) % 24) / 2)];
 }
 
-function pickSignal(month, hour) {
-  if ([1, 4, 9].includes(month)) return 'Reset and realignment';
-  if (hour >= 21 || hour < 6) return 'Quiet strategy';
-  if ([3, 6, 11].includes(month)) return 'Momentum with restraint';
-  return 'Focused growth';
+function getYearPillar(year) {
+  const stem = stems[(year - 4) % 10 < 0 ? ((year - 4) % 10) + 10 : (year - 4) % 10];
+  const branch = branches[(year - 4) % 12 < 0 ? ((year - 4) % 12) + 12 : (year - 4) % 12];
+  return `${stem}${branch}`;
 }
 
-function buildReport({ name, birthDate, birthTime, birthPlace, gender, phone, whatsappOptIn }) {
+function getElementBias(month, hour) {
+  const idx = (month + hour) % 5;
+  return {
+    dominant: elements[idx],
+    support: elements[(idx + 2) % 5],
+    caution: elements[(idx + 3) % 5],
+  };
+}
+
+function buildChineseReport({ name, birthDate, birthTime, birthPlace, gender, phone, whatsappOptIn }) {
   const [year, month, day] = birthDate.split('-').map(Number);
+  const hour = Number((birthTime || '00:00').split(':')[0]);
   const zodiac = getZodiacSign(month, day);
-  const timeBucket = getTimeBucket(birthTime);
-  const signal = pickSignal(month, Number((birthTime || '00:00').split(':')[0]));
+  const yearPillar = getYearPillar(year);
+  const timeBranch = getTimeBranch(hour);
+  const elementBias = getElementBias(month, hour);
   const wantsWhatsapp = Boolean(whatsappOptIn && phone);
 
-  const pronoun = gender === 'male' ? 'his' : gender === 'female' ? 'her' : 'their';
+  const signal = elementBias.dominant === '木'
+    ? '擴張但要收斂'
+    : elementBias.dominant === '火'
+    ? '有動能但忌躁進'
+    : elementBias.dominant === '土'
+    ? '適合穩定落地'
+    : elementBias.dominant === '金'
+    ? '適合判斷與取捨'
+    : '適合觀察與整合';
 
-  const markdown = `# Integrated Destiny Report\n\n## Core summary\n${name}'s current profile points to a **strategic, pattern-aware, operator-like personality**. Across Bazi, Ziwei, Human Design, and Astrology, the dominant signal is not about doing more — it is about choosing better, reducing noise, and committing energy where leverage is highest.\n\n## Profile snapshot\n- **Name:** ${name}\n- **Birth date:** ${birthDate}\n- **Birth time:** ${birthTime}\n- **Birthplace:** ${birthPlace}\n- **Astrology signal:** ${zodiac}\n- **Energy rhythm:** ${timeBucket}\n- **Weekly signal:** ${signal}\n- **WhatsApp weekly report:** ${wantsWhatsapp ? `Enabled (${phone})` : 'Not enabled'}\n\n## Integrated reading\nFrom a **Ziwei-style perspective**, this chart reads more like a decision-maker than a passive executor. The life theme is tied to direction, structure, and the ability to see where effort should or should not go.\n\nFrom a **Bazi-style perspective**, the current energy pattern suggests that balance matters more than force. This is not a profile that wins by endless intensity. It performs best when timing, clarity, and self-regulation are aligned.\n\nFrom a **Human Design-style perspective**, decision quality improves when there is inner clarity before commitment. External pressure may create premature yeses, but the strongest outcomes come when ${pronoun} own timing is respected.\n\nFrom an **Astrology-style perspective**, the ${zodiac} tone shows up as the outer layer: style, response pattern, and interpersonal energy. It adds visible character to the deeper structural themes from Ziwei and Bazi.\n\n## 1) Career / Work\nThis profile is strongest in roles that require **judgment, sequencing, and resource allocation**. Low-leverage busywork drains the system quickly, while strategic framing and meaningful ownership unlock momentum.\n\n- Focus on one or two high-value priorities instead of expanding blindly.\n- Avoid being captured by urgency from other people.\n- Work becomes more powerful when direction is set before execution accelerates.\n\n## 2) Relationships / People\nInterpersonally, the strongest mode is **clear, direct, elegant communication**. This profile usually does not need more emotional noise; it needs more signal quality.\n\n- Say the real need earlier.\n- Protect energy from vague expectations.\n- Precision and honesty will work better than over-explaining.\n\n## 3) State / Energy\nThe main risk is rarely lack of ability. It is more often **fragmented attention**. When too many loops stay open, clarity falls faster than motivation.\n\n- Reduce cognitive tab overload.\n- Keep a nightly reset habit.\n- Use calm decision windows for important commitments.\n\n## 3 actions for this week\n1. Choose the single most meaningful current project and define the next visible milestone.\n2. Remove one obligation that creates activity but not momentum.\n3. Block one uninterrupted decision session to review direction, not just tasks.\n\n## Pitfalls to avoid\n- Committing too early before internal clarity is present.\n- Opening parallel tracks out of anxiety.\n- Mistaking movement for meaningful progress.\n\n## Lucky action windows\n- **Monday morning:** direction-setting and priority resets\n- **Wednesday afternoon:** alignment conversations and difficult clarifications\n- **Friday late morning:** summary thinking, decision closure, and commitment setting\n\n## Final note\nThis is a **v0 integrated report template**, designed to feel like a polished international product. The long-term direction is to convert this into a true dynamic destiny engine with stronger chart logic, better timing interpretation, and optional WhatsApp weekly delivery.`;
+  const markdown = `# 綜合命理分析\n\n## 基本資料\n- **姓名：** ${name}\n- **出生日期：** ${birthDate}\n- **出生時間：** ${birthTime}\n- **出生地點：** ${birthPlace}\n- **星座：** ${zodiac}\n- **年柱（簡化）：** ${yearPillar}\n- **時支（簡化）：** ${timeBranch}\n- **五行偏向（簡化推估）：** 主 ${elementBias.dominant}，輔 ${elementBias.support}，需留意 ${elementBias.caution}\n- **WhatsApp 週報：** ${wantsWhatsapp ? `已選填（${phone}）` : '未開啟'}\n\n## 一句話總評\n你目前的命理訊號偏向 **${signal}**。整體看起來，你不是適合用蠻力一路衝的人，而是更適合靠判斷、節奏與選擇來放大結果。\n\n## 綜合主軸\n從 **八字** 的角度看，${yearPillar} 年柱搭配 ${timeBranch} 時支的簡化訊號，呈現出一種「需要靠方向感與節奏感來穩定輸出」的型態。這類型的人，通常不是做得越多越好，而是選得越準越強。\n\n從 **紫微語感** 來看，你的人生主軸比較像是要學會站到正確位置，掌握資源、節奏與決策，而不是長期待在只負責執行、卻沒有主導權的位置。你若放在對的位置，推進速度會很快；若放錯地方，則容易產生內耗、煩躁與被浪費的感覺。\n\n從 **人類圖語感** 來看，你比較不適合在外界很吵、資訊很多、情緒很急的情況下做重大決定。真正好的決策，往往來自你內在已經對齊之後的清楚，而不是被情境推著走的當下反應。\n\n從 **星座** 的層面看，${zodiac} 的外顯特質會讓你呈現出特定的互動方式與情緒風格：你重視品質、討厭低效率、對人事物有自己的判斷標準，也不太容易長期忍受空話與模糊。\n\n## 1) 事業 / 工作\n你在工作上最強的地方，不是單純執行，而是 **判斷什麼值得做、什麼該先做、什麼需要延後**。這代表你適合高槓桿的角色，例如：整合、決策、主導、策略、優先級排序。\n\n近期的能量提醒是：不要被太多平行任務切碎。你真正需要的不是再多做一點，而是更明確地收斂，把主要資源壓到最值得的主題上。\n\n## 2) 關係 / 人際\n你在人際互動上，通常比較適合 **直接、清楚、有內容** 的交流方式。你並不缺社交能力，但你對低品質互動的容忍度相對低。這意味著，關係經營的重點不在於多，而在於準。\n\n近期若感覺溝通變多、雜訊變多，建議你更早說出真正的需求，而不是等到情緒累積後才表達不耐。\n\n## 3) 狀態 / 能量\n你目前最值得注意的，不一定是體力，而是 **腦內開太多分頁**。當你同時想推太多件事情、或同時看見太多可能性時，會開始出現注意力分散、判斷變慢、情緒煩躁的現象。\n\n簡單講，你的問題通常不是沒能力，而是太容易進入高維度分心。\n\n## 本週 3 個行動\n1. 只選 1–2 個真正高槓桿的主題，不要同時推太多。\n2. 幫自己留一段安靜、不被打斷的判斷時間。\n3. 把不必要的義務、低品質承諾、雜訊來源減掉一個。\n\n## 本週避坑提醒\n- 不要在還沒想清楚時就太早答應。\n- 不要把忙碌誤認成進展。\n- 不要因為焦慮而開更多新題。\n\n## 幸運時間窗\n- **週一上午：** 適合定方向、定優先級。\n- **週三下午：** 適合談關鍵對齊與關係修正。\n- **週五上午：** 適合做總結、收斂與下一步決策。\n\n## 說明\n這是 **v0 版本**，目前已從純模板進步到「根據輸入資料做簡化動態計算與生成」。但它還不是完整的專業命盤引擎。\n\n下一步若要做到「真的在算」，我建議升級成：\n1. **命盤計算後端**：把八字四柱、時區、出生地換算做準。\n2. **LLM 解讀層**：把真實命盤結果轉成自然語言報告。\n3. **週報系統**：若使用者勾選 WhatsApp，就定期推送個人化週報。`;
 
   return { markdown, signal, wantsWhatsapp };
 }
 
 function renderMarkdown(md) {
-  return md
-    .replace(/^### (.*)$/gm, '<h3>$1</h3>')
-    .replace(/^## (.*)$/gm, '<h2>$1</h2>')
-    .replace(/^# (.*)$/gm, '<h1>$1</h1>')
-    .replace(/^\- \*\*(.*?)\*\*: (.*)$/gm, '<li><strong>$1:</strong> $2</li>')
-    .replace(/^\- (.*)$/gm, '<li>$1</li>')
-    .replace(/^(\d+)\. (.*)$/gm, '<li>$2</li>')
-    .split(/\n\n+/)
-    .map(block => {
-      if (/^<h[1-3]>/.test(block)) return block;
-      if (block.includes('<li>')) {
-        const isOrdered = /<li>/.test(block) && /actions for this week/i.test(block) === false && /^<li>/.test(block.trim());
-        return `<ul>${block}</ul>`;
-      }
-      return `<p>${block.replace(/\n/g, '<br/>')}</p>`;
-    })
-    .join('');
+  const lines = md.split('\n');
+  let html = '';
+  let inUl = false;
+  let inOl = false;
+
+  const closeLists = () => {
+    if (inUl) { html += '</ul>'; inUl = false; }
+    if (inOl) { html += '</ol>'; inOl = false; }
+  };
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    if (!line) { closeLists(); continue; }
+    if (line.startsWith('# ')) { closeLists(); html += `<h1>${line.slice(2)}</h1>`; continue; }
+    if (line.startsWith('## ')) { closeLists(); html += `<h2>${line.slice(3)}</h2>`; continue; }
+    if (line.startsWith('### ')) { closeLists(); html += `<h3>${line.slice(4)}</h3>`; continue; }
+    if (/^\d+\.\s/.test(line)) {
+      if (!inOl) { closeLists(); html += '<ol>'; inOl = true; }
+      html += `<li>${line.replace(/^\d+\.\s/, '')}</li>`;
+      continue;
+    }
+    if (line.startsWith('- ')) {
+      if (!inUl) { closeLists(); html += '<ul>'; inUl = true; }
+      html += `<li>${line.slice(2)}</li>`;
+      continue;
+    }
+    closeLists();
+    html += `<p>${line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p>`;
+  }
+  closeLists();
+  return html;
 }
 
 form.addEventListener('submit', (event) => {
   event.preventDefault();
   const data = Object.fromEntries(new FormData(form).entries());
   const payload = {
-    name: data.name?.trim() || 'User',
+    name: data.name?.trim() || '使用者',
     birthDate: data.birthDate,
     birthTime: data.birthTime,
-    birthPlace: data.birthPlace?.trim() || 'Unknown',
+    birthPlace: data.birthPlace?.trim() || '未知',
     gender: data.gender || '',
     phone: data.phone?.trim() || '',
     whatsappOptIn: Boolean(data.whatsappOptIn),
   };
 
-  const result = buildReport(payload);
-  summaryName.textContent = `${payload.name}'s live v0 report`;
+  const result = buildChineseReport(payload);
+  summaryName.textContent = `${payload.name} 的 v0 分析`;
   summaryScore.textContent = result.signal;
-  summaryWhatsapp.textContent = result.wantsWhatsapp ? 'Enabled' : 'Not enabled';
+  summaryWhatsapp.textContent = result.wantsWhatsapp ? '已開啟' : '未開啟';
   reportEl.innerHTML = renderMarkdown(result.markdown);
   document.getElementById('report-root').scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
-const initial = buildReport({
-  name: 'Template User',
+const initial = buildChineseReport({
+  name: '模板使用者',
   birthDate: '1990-01-01',
   birthTime: '09:00',
-  birthPlace: 'Taipei, Taiwan',
+  birthPlace: '台北，台灣',
   gender: '',
   phone: '',
   whatsappOptIn: false,

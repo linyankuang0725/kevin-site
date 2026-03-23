@@ -10,7 +10,7 @@ export async function onRequestPost(context) {
       }
     }
 
-    const bridgeUrl = 'https://5a1dc77a7fa45d.lhr.life/bazi/report';
+    const bridgeUrl = 'https://read-days-bone-magic.trycloudflare.com/bazi/report';
     const bridgeToken = 'qJtkn2BNllI-PTOv1KrMXnOcQB3G-1mGNNE3b0grDD0';
 
     const res = await fetch(bridgeUrl, {

@@ -37,10 +37,16 @@ function renderMarkdown(md) {
   return html;
 }
 
+const DIRECT_BRIDGE_URL = 'https://yan-kuang-lin-ux32ln.tail1c0251.ts.net/bazi/report';
+const DIRECT_BRIDGE_TOKEN = 'qJtkn2BNllI-PTOv1KrMXnOcQB3G-1mGNNE3b0grDD0';
+
 async function generateReport(payload) {
-  const res = await fetch('/api/bazi-report-v2', {
+  const res = await fetch(DIRECT_BRIDGE_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${DIRECT_BRIDGE_TOKEN}`,
+    },
     body: JSON.stringify(payload),
   });
   if (!res.ok) throw new Error(`API ${res.status}`);

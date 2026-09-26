@@ -291,8 +291,16 @@
     el.settingsBtn.setAttribute("aria-expanded", "false");
   });
 
+  let resetArmed;
   el.reset.addEventListener("click", () => {
-    if (!confirm("確定要清除所有「已熟／不熟」紀錄嗎？")) return;
+    if (!resetArmed) {
+      el.reset.textContent = "再點一次確認清除";
+      resetArmed = setTimeout(() => { resetArmed = null; el.reset.textContent = "清除熟練度紀錄"; }, 3000);
+      return;
+    }
+    clearTimeout(resetArmed);
+    resetArmed = null;
+    el.reset.textContent = "清除熟練度紀錄";
     progress = {};
     save(STORE.progress, progress);
     buildDeck(deck[pos]);

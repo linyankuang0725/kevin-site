@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Einbürgerungstest 字卡 | Kevin Site</title>
+    <meta name="description" content="Leben in Deutschland / Einbürgerungstest 310 題字卡：德文題目在前，點擊顯示中文翻譯與正解。" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="LiD 字卡" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./icon.svg" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="flag" aria-hidden="true"><i></i><i></i><i></i></span>
+        <div>
+          <h1>Leben in Deutschland</h1>
+          <p lang="zh-Hant">永居文化考試 · 310 題字卡</p>
+        </div>
+      </div>
+      <button class="icon-btn" id="settings-btn" aria-label="篩選與設定" aria-expanded="false" aria-controls="settings">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+      </button>
+    </header>
+
+    <section class="settings" id="settings" hidden lang="zh-Hant">
+      <div class="setting-row">
+        <span class="setting-label">範圍</span>
+        <div class="seg" data-key="set">
+          <button data-val="all">全部 310</button>
+          <button data-val="N">全國 300</button>
+          <button data-val="B">柏林 10</button>
+        </div>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">熟練度</span>
+        <div class="seg" data-key="status">
+          <button data-val="all">全部</button>
+          <button data-val="todo">未記住</button>
+          <button data-val="learning">不熟 ✗</button>
+          <button data-val="known">已熟 ✓</button>
+        </div>
+      </div>
+      <div class="setting-row">
+        <label class="setting-label" for="topic">主題</label>
+        <select id="topic"></select>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">順序</span>
+        <div class="seg" data-key="order">
+          <button data-val="seq">依題號</button>
+          <button data-val="shuffle">隨機</button>
+        </div>
+      </div>
+      <div class="setting-row">
+        <label class="setting-label" for="jump">跳題</label>
+        <form class="jump" id="jump-form">
+          <input id="jump" type="number" inputmode="numeric" min="1" max="300" placeholder="1–300" />
+          <button type="submit">前往</button>
+        </form>
+      </div>
+      <div class="setting-row stats-row">
+        <div class="stats" id="stats"></div>
+        <button class="text-btn" id="reset-btn">清除熟練度紀錄</button>
+      </div>
+      <p class="source">
+        題目與選項取自 BAMF《Gesamtfragenkatalog》（Stand 07.05.2025）。正解來自公開題庫資料並經交叉比對，不確定的題可再到
+        <a href="https://oet.bamf.de/" target="_blank" rel="noopener">oet.bamf.de</a> 驗證。中文為非官方翻譯。
+      </p>
+    </section>
+
+    <main class="stage">
+      <div class="progress" aria-hidden="true"><div class="progress-bar" id="progress-bar"></div></div>
+      <div class="deck-meta">
+        <span id="position">–</span>
+        <span id="badge" class="badge" hidden></span>
+      </div>
+
+      <article class="card" id="card" tabindex="0" aria-live="polite">
+        <div class="card-head">
+          <span class="qnum" id="qnum"></span>
+          <span class="topic" id="qtopic" lang="zh-Hant"></span>
+        </div>
+        <h2 class="question" id="question"></h2>
+        <p class="question-zh" id="question-zh" lang="zh-Hant"></p>
+        <div class="picture" id="picture" lang="zh-Hant" hidden></div>
+        <ol class="options" id="options"></ol>
+        <p class="tap-hint" id="tap-hint" lang="zh-Hant">點一下卡片看中文與答案，或直接點你選的選項</p>
+      </article>
+
+      <p class="empty" id="empty" lang="zh-Hant" hidden>這個篩選條件下沒有題目。打開右上角選單換個範圍吧。</p>
+    </main>
+
+    <nav class="actions" lang="zh-Hant">
+      <button class="nav-btn" id="prev-btn" aria-label="上一題">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="mark-btn learning" id="learning-btn">✗ 不熟</button>
+      <button class="mark-btn known" id="known-btn">✓ 記住了</button>
+      <button class="nav-btn" id="next-btn" aria-label="下一題">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </nav>
+
+    <script src="./questions.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
